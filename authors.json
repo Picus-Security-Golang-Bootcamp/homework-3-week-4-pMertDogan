@@ -1,0 +1,18 @@
+[
+    {
+        "AuthorID": "0",
+        "Name": "J.R.R. Tolkien"
+    },
+    {
+        "AuthorID": "1",
+        "Name": "Rob Pike"
+    },
+    {
+        "AuthorID": "2",
+        "Name": "Jack London"
+    },
+    {
+        "AuthorID": "3",
+        "Name": "Vasilyeviç Gogol"
+    }
+]

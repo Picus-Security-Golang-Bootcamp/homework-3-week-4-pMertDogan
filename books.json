@@ -1,0 +1,62 @@
+[
+    {
+        "ID": "0",
+        "AuthorID": "0",
+        "BookName": "The Lord of the Rings: The Return of the King",
+        "NumberOfPages": 355,
+        "StockCount": 1,
+        "Price": 50,
+        "ISBN": "ISBN1",
+        "StockCode": "123456"
+    },
+    {
+        "ID": "1",
+        "AuthorID": "0",
+        "BookName": "Hobbit",
+        "NumberOfPages": 665,
+        "StockCount": 14,
+        "Price": 41,
+        "ISBN": "ISBN523",
+        "StockCode": "23456"
+    },
+    {
+        "ID": "2",
+        "AuthorID": "1",
+        "BookName": "The Unix Programming Environment",
+        "NumberOfPages": 375,
+        "StockCount": 55,
+        "Price": 11,
+        "ISBN": "ISBN1",
+        "StockCode": "3456"
+    },
+    {
+        "ID": "3",
+        "AuthorID": "2",
+        "BookName": "Beyaz Diş",
+        "NumberOfPages": 285,
+        "StockCount": 3,
+        "Price": 5,
+        "ISBN": "ISBN523",
+        "StockCode": "456"
+    },
+    {
+        "ID": "4",
+        "AuthorID": "3",
+        "BookName": "Palto",
+        "NumberOfPages": 474,
+        "StockCount": 10,
+        "Price": 10,
+        "ISBN": "ISBN51615",
+        "StockCode": "56"
+    },
+    {
+        "ID": "5",
+        "AuthorID": "0",
+        "BookName": "The Lord of The Rings: The Fellowship of the Ring",
+        "NumberOfPages": 1558,
+        "StockCount": 32,
+        "Price": 24,
+        "ISBN": "ISBN5162615",
+        "StockCode": "65432"
+    }
+]
