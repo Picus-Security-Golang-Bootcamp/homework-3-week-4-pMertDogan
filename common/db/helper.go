@@ -73,13 +73,13 @@ func ReadFilesAndSaveThemToDB(authorRepository *author.AuthorRepository, bookRep
 	authors, authorsErr := author.FromFile(os.Getenv("sourceAuthorsJsonLocation"))
 
 	if authorsErr != nil {
-		PrintUsageAndExit("unable read Authors from file " + authorsErr.Error())
+		log.Fatal("unable read Authors from file " + authorsErr.Error())
 	}
 
 	books, bookErr := book.FromFile(os.Getenv("sourceBooksJsonLocation"))
 
 	if bookErr != nil {
-		PrintUsageAndExit("unable read Books from file " + bookErr.Error())
+		log.Fatal("unable read Books from file " + bookErr.Error())
 	}
 
 	authorRepository.InsertSampleData(authors)
@@ -88,9 +88,3 @@ func ReadFilesAndSaveThemToDB(authorRepository *author.AuthorRepository, bookRep
 	log.Println("Sample Datas imported, source is JSON File\n \n ")
 }
 
-//print optional meesage and exit with error code (1)
-func PrintUsageAndExit(optionalText string) {
-	fmt.Println(optionalText)
-	os.Exit(1)
-
-}
