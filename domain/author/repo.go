@@ -48,13 +48,34 @@ func (c *AuthorRepository) FindByName(authorName string) (*Author, error) {
 	return author, nil
 }
 
-// func (c *BookRepository) GetByID(bookID string) (*Book, error) {
-// 	var book *Book
-// 	result := c.db.First(&book, "ID = ?", bookID)
+func (c *AuthorRepository) GetByID(authorID string) (*Author, error) {
+	var author *Author
+	result := c.db.First(&author, "Author_ID = ?", authorID)
 
-// 	if result.Error != nil {
-// 		return nil, result.Error
-// 	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
 
-// 	return book, nil
-// }
+	return author, nil
+}
+
+func (b *AuthorRepository) GetAuthorsWithBooks() (Authors, error) {
+	var authors Authors
+	result := b.db.Preload("Books").Find(&authors)
+	if result.Error != nil {
+		return nil, result.Error
+	}	
+	return authors, nil
+}
+
+
+func (b *AuthorRepository) DropTable() error {
+	result := b.db.Exec("DROP TABLE authors")
+	// b.db.dr
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+
+}

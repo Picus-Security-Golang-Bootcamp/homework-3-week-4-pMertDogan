@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -11,30 +12,27 @@ import (
 	"github.com/pMertDogan/picusWeek4/domain/book"
 )
 
-var usageInformation = ` 
-
-****
-Just fill the .env file with your database informations. 
-If you get an error message please check parameters inside the  .env file
-****
-
-`
+var resetAppDB = flag.Bool("reset", false, "Migrate tables and save default values thats readed by json files")
+var dropTable = flag.Bool("dropTable", false, "Drop authors and books tables for clear SQL data")
 
 //init app config
 func init() {
 	//Load env
 	err := godotenv.Load()
 	if err != nil {
-		printUsageAndExit("Error loading .env file. \n ERROR : " + err.Error())
+		log.Fatal("Error loading .env file. \n ERROR : " + err.Error())
 	}
+	//parse reset flag or any other
+	flag.Parse()
 
 }
 
 func main() {
+
 	//make database connection
-	db, err := postgres.ConnectPostgresDB()
-	if err != nil {
-		log.Fatal("Postgres cannot init: \n ", err)
+	db, errPG := postgres.ConnectPostgresDB()
+	if errPG != nil {
+		log.Fatal("Postgres cannot init: \n ", errPG)
 	}
 	log.Println("Postgres connected!!")
 
@@ -42,61 +40,82 @@ func main() {
 	authorRepository := author.NewAuthorRepository(db)
 	bookRepository := book.NewBookRepository(db)
 
-	//migrate database struct changes.
-	authorRepository.Migrations()
-	bookRepository.Migrations()
+	//check if the user request it drop table
+	//drop old tables to clean all
 
-	//save source data readed by json file to SQL
-	readFilesAndSaveThemToDB(authorRepository, bookRepository)
-
-
-	// SUPPORTED Methods
-	b, err := bookRepository.FindByName("Lord")
-	// // b, err := bookRepository.GetByID("2")
-	// b, err := bookRepository.GetBooksWithAuthors()
-	a, err := authorRepository.FindByName("J.R.R")
-
-	if err != nil {
-		log.Fatal("Unable read all data " + err.Error())
+	if *dropTable {
+		dropTables(authorRepository, bookRepository)
 	}
 
+	//check is user request reset using flag
+	if *resetAppDB {
+
+		resetDB(authorRepository, bookRepository)
+	}
+
+	//migrate database struct changes.
+	// migrateDatabase(authorRepository, bookRepository)
+
+	//save source data readed by json file to SQL
+	// readFilesAndSaveThemToDB(authorRepository, bookRepository)
+
+	//moved to postgres package
+	// simple test functions
+	// postgres.UpdateBookTest(bookRepository)
+	// postgres.SoftDeleteTest(bookRepository)
+
+	// SUPPORTED Methods example
+	// b, err := bookRepository.FindByName("Lord")
+
+	a, _ := bookRepository.GetByID("2")
+	fmt.Println(a)
+	bookRepository.UpdateBookQuantity("2", "21")
+	a, _ = bookRepository.GetByID("2")
+	fmt.Println(a)
+
+	// softDeleteTest(bookRepository)
+	// b, err := authorRepository.GetAuthorsWithBooks()
+	// a, err := authorRepository.FindByName("J.R.R")
+	// a, err := authorRepository.FindByName("Gogo")
+	// a, err2 := authorRepository.GetByID("2")
+
+	// bookRepository.UpdateBookQuantity("2","763")
+	// if err2 != nil {
+	// 	log.Fatal("Unable read all data " + err2.Error())
+	// }
 	//To test String override
 	//if its return BOOKS not Book
+
+	// b, err := bookRepository.GetBooksWithAuthors()
+	// if err != nil {
+	// 	log.Fatal("Unable read all data " + err.Error())
+	// }
 	// for _,v := range b{
 	// 	fmt.Print(v)
 	// }
+	//fmt.Println(b)
 
-	fmt.Println(a)
-	fmt.Println(b)
+	//Print uses String interface thats we owerwrite
 
 }
 
-func readFilesAndSaveThemToDB(authorRepository *author.AuthorRepository, bookRepository *book.BookRepository) {
-	//read files
-	// authors := readAuthorsFromFile()
-	authors, authorsErr := author.FromFile(os.Getenv("sourceAuthorsJsonLocation"))
-
-	if authorsErr != nil {
-		printUsageAndExit("unable read Authors from file " + authorsErr.Error())
+//drop old tables to clean all
+func dropTables(authorRepository *author.AuthorRepository, bookRepository *book.BookRepository) {
+	err := postgres.DropTables(authorRepository, bookRepository)
+	if err != nil {
+		log.Fatal("Unable drop table" + err.Error())
 	}
-
-
-	books, bookErr := book.FromFile(os.Getenv("sourceBooksJsonLocation"))
-
-	if bookErr != nil {
-		printUsageAndExit("unable read Books from file " + bookErr.Error())
-	}
-
-	authorRepository.InsertSampleData(authors)
-	bookRepository.InsertSampleData(books)
-
-	log.Println("Sample Datas imported, source is JSON File\n \n ")
-}
-
-//print optional meesage and exit with error code (1)
-func printUsageAndExit(optionalText string) {
-	fmt.Println(optionalText)
-	fmt.Println(usageInformation)
 	os.Exit(1)
+}
 
+// migrate and save json data to sql
+func resetDB(authorRepository *author.AuthorRepository, bookRepository *book.BookRepository) {
+	fmt.Println("reset start")
+	//create our DB struct on SQL
+	postgres.MigrateDatabase(authorRepository, bookRepository)
+
+	//store local data to sql
+	postgres.ReadFilesAndSaveThemToDB(authorRepository, bookRepository)
+	fmt.Println("reset end")
+	os.Exit(0)
 }

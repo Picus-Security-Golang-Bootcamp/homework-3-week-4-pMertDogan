@@ -68,7 +68,41 @@ func (c *BookRepository) GetByID(bookID string) (*Book, error) {
 	return book, nil
 }
 
+func (b *BookRepository) UpdateBookQuantity(bookID, quantity string) error {
+	var book *Book
+	// result := b.db.Update(&book, "stock_count", quantity).Where("id = ?", bookID)
+	result := b.db.Model(&book).Where("ID = ?", bookID).Update("stock_count", quantity)
 
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+
+}
+func (b *BookRepository) SoftDeleteBook(bookID string) error {
+	result := b.db.Where("id = ?", bookID).Delete(&Book{})
+
+				//db.Where("age = ?", 20).Delete(&User{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+
+}
+
+func (b *BookRepository) DropTable() error {
+	result := b.db.Exec("DROP TABLE books")
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+
+}
 
 
 
