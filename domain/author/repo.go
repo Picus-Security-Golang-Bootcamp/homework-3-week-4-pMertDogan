@@ -61,7 +61,7 @@ func (c *AuthorRepository) GetByID(authorID string) (*Author, error) {
 
 func (b *AuthorRepository) GetAuthorsWithBooks() (Authors, error) {
 	var authors Authors
-	result := b.db.Preload("Books").Find(&authors)
+	result := b.db.Preload("books").Find(&authors)
 	if result.Error != nil {
 		return nil, result.Error
 	}	

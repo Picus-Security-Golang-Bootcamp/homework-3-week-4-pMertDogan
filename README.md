@@ -1,10 +1,34 @@
 # Homework 3 Week 4
 
-- `Book` ve `Author` bilgileri bir dosyadan okunacak ve DB'ye kayıt edilecek.
-- `list`, `search`, `delete(soft-delete)`, `buy` gibi `os.Args` komutları yerine DB sorguları yazılacak. 
-- Bu 2 modelle alakalı GORM sorguları yazılacak.
+Simple application written in Go. Main focus is using GORM as ORM. Postgres is used as background
+
+Its about bookLiblary that store books and author information.
+
+Please edit .env file with your connection information.Iss filled with example  values
+
+For the first usage please use -init flag to fill SQL with dumy values
+
+> go run .\main.go -init
+
+You can clear SQL after the test operations with -clear flag
+
+>go run .\main.go -clear
+
+> go run .\main.go -init
+
+Then use -init again to repair & fill SQL with data
+
+There is no any other flag available. Just edit comments inside main.go and have fun!
+
+#Example functions for each domain (Author , book)
+
   - GetByID
   - FindByName
   - GetBooksWithAuthor
-  - GetAuthorWithBooks etc. (GORM dökümantasyondaki sorgu çeşitlerine bakılacak bu 2 modelde uygulanacak)
-  - (Sadece 4 sorgu değil olabildiğince sorgu yazıp kendinizi geliştirin. Bu size artı olarak dönüş olacaktır.)
+  - GetAuthorWithBooks
+
+
+
+
+
+

@@ -13,7 +13,7 @@ type Authors []Author
 
 type Author struct {
 	gorm.Model
-	AuthorID string  //`gorm:"type:varchar(100);column:ID_Author2"` SQL type and column name can be selected
+	AuthorID string  `gorm:"foreignKey:AuthorID;references:AuthorID"` //`gorm:"type:varchar(100);column:ID_Author2"` SQL type and column name can be selected
 	Name     string 
 }
 

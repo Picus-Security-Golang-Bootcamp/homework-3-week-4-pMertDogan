@@ -36,7 +36,7 @@ func (c *BookRepository) InsertSampleData(books Books) {
 
 }
 
-func (b *BookRepository) GetBooksWithAuthors() ([]Book, error) {
+func (b *BookRepository) GetBooksWithAuthors() (Books, error) {
 	var books Books
 	result := b.db.Preload("Authors").Find(&books)
 	if result.Error != nil {
