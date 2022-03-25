@@ -15,6 +15,10 @@ import (
 var resetAppDB = flag.Bool("init", false, "Migrate tables and save default values thats readed by json files")
 var dropTable = flag.Bool("clear", false, "Drop authors and books tables for clear SQL data")
 
+
+
+
+
 //init env and parse flags
 func init() {
 	//Load env
@@ -94,13 +98,21 @@ func main() {
 	// }
 	//fmt.Println(b)
 
+
+
 	// v , e := bookRepository.GetBooksWithAuthors()
-	v , e := authorRepository.GetAuthorsWithBooks()
+	// v , e := bookRepository.GetAllBooks()
+	// v , e := authorRepository.GetAuthorsWithBooks()
+	v , e := authorRepository.GetAuthorWithBooks("1")
 	
 	if e != nil {
 		log.Fatal(e)
 	}
-	fmt.Print(v)
+	for _,x := range v{
+			fmt.Print(x)
+		}
+
+	// fmt.Print(v)
 
 }
 

@@ -38,7 +38,13 @@ func (c *BookRepository) InsertSampleData(books Books) {
 
 func (b *BookRepository) GetBooksWithAuthors() (Books, error) {
 	var books Books
-	result := b.db.Preload("Authors").Find(&books)
+	result := b.db.Preload("Author").Find(&books)
+	// x:= b.db.ToSQL(func(tx *gorm.DB) *gorm.DB {
+	// 	return b.db.Preload("Authors").Find(&books)
+	// })
+
+	// fmt.Println(x)
+
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -83,7 +89,7 @@ func (b *BookRepository) UpdateBookQuantity(bookID, quantity string) error {
 func (b *BookRepository) SoftDeleteBook(bookID string) error {
 	result := b.db.Where("id = ?", bookID).Delete(&Book{})
 
-				//db.Where("age = ?", 20).Delete(&User{})
+	//db.Where("age = ?", 20).Delete(&User{})
 
 	if result.Error != nil {
 		return result.Error
@@ -104,7 +110,16 @@ func (b *BookRepository) DropTable() error {
 
 }
 
+func (r *BookRepository) GetAllBooks() (Books, error) {
+	var books Books
+	result := r.db.Find(&books)
 
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return books, nil
+}
 
 
 // func (c *BookRepository) FindBooks(bookID string) (*Books, error) {

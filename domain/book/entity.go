@@ -29,7 +29,7 @@ type Book struct {
 	StockCode     string
 	//Authors
 	//type Authors []Author
-	Authors author.Authors `gorm:"foreignKey:AuthorID;references:AuthorID"`
+	Author author.Author `gorm:"foreignKey:AuthorID;references:AuthorID"`
 }
 
 // fromJson
@@ -46,7 +46,7 @@ func (r *Books) Marshal() ([]byte, error) {
 
 //override fmt.print() presensation
 func (b Book) String() string {
-	return fmt.Sprintf("ID : %s, Name : %s Price %d, StockCount %d,AuthorID %s,  CreatedAt %s, DeletedAt %s \n ", b.ID, b.BookName, b.Price, b.StockCount, b.AuthorID, b.CreatedAt.Format("2006-01-02 15:04:05"), b.DeletedAt.Time.Format("2006-01-02 15:04:05"))
+	return fmt.Sprintf("ID : %s, Name : %s Price %d, StockCount %d,AuthorID %s,  CreatedAt %s, DeletedAt %s  *** Author INFO : Name  %s \n ", b.ID, b.BookName, b.Price, b.StockCount, b.AuthorID,b.CreatedAt.Format("2006-01-02 15:04:05"), b.DeletedAt.Time.Format("2006-01-02 15:04:05"),b.Author.Name)
 }
 
 //read from file and return
